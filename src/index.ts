@@ -19,27 +19,27 @@ const PORT = process.env.PORT || 5000;
 app.use(express.json());
 app.use(cors());
 
-async function startServer() {
-  try {
-    const connection = await mysql.createConnection({
+async function startServer() {  
+  try {  
+    const connection = await mysql.createConnection({   
       host: process.env.DB_HOST,
       user: process.env.DB_USER,
       password: process.env.DB_PASSWORD,
     });
 
     await connection.query(
-      `CREATE DATABASE IF NOT EXISTS \`${process.env.DB_NAME}\``,
+      `CREATE DATABASE IF NOT EXISTS \`${process.env.DB_NAME}\``,  //Create database if not exsist
     );
     console.log(`Database ${process.env.DB_NAME} created successfully.`);
     await connection.end();
 
-    await sequelize.authenticate();
+    await sequelize.authenticate();      //Test the connection by trying to authenticate
     console.log("Database connection established.");
 
-    configAssociations();
+    configAssociations(); //using sequelize creating database tables with relations (by calling this function)
 
     await sequelize.sync({ alter: true, logging: console.log });
-    console.log("Models synchronized successfully.");
+    console.log("Models synchronized successfully.");  //
 
     app.listen(PORT, () => {
       console.log(`Server is running on port ${PORT}`);
